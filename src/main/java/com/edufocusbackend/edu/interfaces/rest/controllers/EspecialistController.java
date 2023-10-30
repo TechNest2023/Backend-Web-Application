@@ -5,6 +5,7 @@ import com.edufocusbackend.edu.application.internal.dtos.CreateSpecialistDto;
 import com.edufocusbackend.edu.application.internal.mappers.CreateSpecialistToSpecialist;
 import com.edufocusbackend.edu.application.internal.queryservices.EspecialistQueryServiceImpl;
 import com.edufocusbackend.edu.domain.model.aggregates.Specialist;
+import com.edufocusbackend.edu.domain.model.commands.CreateSpecialistCommand;
 import com.edufocusbackend.edu.domain.model.queries.GetAllEspecialistsQuery;
 import com.edufocusbackend.edu.domain.services.EspecialistCommandService;
 import com.edufocusbackend.edu.domain.services.EspecialistQueryService;
@@ -35,8 +36,13 @@ public class EspecialistController {
     }
     @PostMapping
     public  ResponseEntity<Long> createSpecialist(@RequestBody CreateSpecialistDto specialist){
-        Specialist specialistToAdd = CreateSpecialistToSpecialist.Map(specialist);
-        CreateSpecialistToSpecialist command = new CreateSpecialistToSpecialist();
-        specialistToAdd = specialistCommandService.handle(command);
+        CreateSpecialistCommand command = new CreateSpecialistCommand(
+        specialist.getFirstName(),
+                specialist.getLastName(),
+                specialist.getAge(),
+                specialist.getSpecialization(),
+                specialist.getLenguage(),
+                specialist.getNationality());
+       return ResponseEntity.status(HttpStatus.CREATED).body(specialistCommandService.handle(command));
     }
 }

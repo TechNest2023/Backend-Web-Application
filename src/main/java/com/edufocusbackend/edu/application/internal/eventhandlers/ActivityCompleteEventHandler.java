@@ -1,4 +1,5 @@
 package com.edufocusbackend.edu.application.internal.eventhandlers;
+import com.edufocusbackend.edu.domain.model.commands.UpdateStudentSessionOnActivityCompletedCommand;
 import com.edufocusbackend.edu.domain.model.events.ActivityCompletedEvent;
 import com.edufocusbackend.edu.domain.model.queries.GetReserveByIdQuery;
 import com.edufocusbackend.edu.domain.services.ReserveCommandService;
@@ -10,17 +11,27 @@ import org.springframework.context.event.EventListener;
 
 public class ActivityCompleteEventHandler {
 
-    private  final StudentQueryService studentCommandService;
-    private  final ReserveCommandService reserveCommandService;
+    private  final StudentCommandService studentCommandService;
+    private  final ReserveQueryService reserveQueryService;
 
-    public ActivityCompleteEventHandler(StudentQueryService studentCommandService, ReserveCommandService reserveCommandService){
+    public ActivityCompleteEventHandler(StudentCommandService studentCommandService, ReserveQueryService reserveQueryService){
         this.studentCommandService = studentCommandService;
-        this.reserveCommandService = reserveCommandService;
+        this.reserveQueryService = reserveQueryService;
     }
 
     @EventListener(ActivityCompletedEvent.class)
     public void on(ActivityCompletedEvent event){
 
-        //GetReserveByIdQuery getReserveByIdQuery = new GetReserveByIdQuery(event.ge)
+        var getReserveByIdQuery = new GetReserveByIdQuery(event.getReserveId());
+        var reserve = reserveQueryService.handle(getReserveByIdQuery);
+
+        if (reserve.isPresent()){
+            var updateStudentSessionOnActivityCompletedCommand = new UpdateStudentSessionOnActivityCompletedCommand(
+                    reserve.get().getStudentRecordId());
+            studentCommandService.handle(updateStudentSessionOnActivityCompletedCommand);
+
+            System.out.println("ActivityCompletedEventHandler executed");
+        }
+
     }
 }

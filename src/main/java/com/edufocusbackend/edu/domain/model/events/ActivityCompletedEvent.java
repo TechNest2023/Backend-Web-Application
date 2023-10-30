@@ -1,6 +1,8 @@
 package com.edufocusbackend.edu.domain.model.events;
+import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
+@Getter
 public final class ActivityCompletedEvent extends ApplicationEvent {
     private final Long reserveId;
     private final Long activityId;
