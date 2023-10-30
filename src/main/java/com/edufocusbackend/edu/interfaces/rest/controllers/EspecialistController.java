@@ -36,5 +36,7 @@ public class EspecialistController {
     @PostMapping
     public  ResponseEntity<Long> createSpecialist(@RequestBody CreateSpecialistDto specialist){
         Specialist specialistToAdd = CreateSpecialistToSpecialist.Map(specialist);
+        CreateSpecialistToSpecialist command = new CreateSpecialistToSpecialist();
+        specialistToAdd = specialistCommandService.handle(command);
     }
 }
