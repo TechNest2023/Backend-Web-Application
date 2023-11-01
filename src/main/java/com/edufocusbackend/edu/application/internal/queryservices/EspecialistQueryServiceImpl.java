@@ -1,5 +1,4 @@
 package com.edufocusbackend.edu.application.internal.queryservices;
-
 import com.edufocusbackend.edu.domain.model.aggregates.Specialist;
 import com.edufocusbackend.edu.domain.model.queries.GetAllEspecialistsQuery;
 import com.edufocusbackend.edu.domain.model.queries.GetEspecialistByIdQuery;
