@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class EduFocusBackendApplication {
+    @GetMapping("/message")
+    public String welcome(){
+        return "WELCOME FROM JAVA SPRING BOOT TO AZURE - EDUFOCUS";
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(EduFocusBackendApplication.class, args);
-    }
-
-    @GetMapping("/Message")
-    public String message(){
-        return "WELCOME FROM JAVA SPRING BOOT TO AZURE - EDUFOCUS";
     }
 }
