@@ -4,10 +4,14 @@ import com.edubackend.edu.domain.model.valueobjects.EduStudentRecordId;
 import com.edubackend.edu.domain.services.StudentCommandService;
 import com.edubackend.edu.domain.services.StudentQueryService;
 import com.edubackend.edu.interfaces.rest.resources.CreateStudentResource;
+import com.edubackend.edu.interfaces.rest.resources.LogInStudentResource;
 import com.edubackend.edu.interfaces.rest.resources.StudentResource;
 import com.edubackend.edu.interfaces.rest.transform.CreateStudentCommandFromResourceAssembler;
+import com.edubackend.edu.interfaces.rest.transform.LogInStudentCommandFromLogInStudentResourceAssembler;
 import com.edubackend.edu.interfaces.rest.transform.StudentResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +45,7 @@ public class StudentsController {
     private final StudentCommandService studentCommandService;
     private final StudentQueryService studentQueryService;
 
-
+    private final Logger logger = LoggerFactory.getLogger(StudentsController.class);
     public StudentsController(StudentCommandService studentCommandService, StudentQueryService studentQueryService) {
         this.studentCommandService = studentCommandService;
         this.studentQueryService = studentQueryService;
@@ -59,6 +63,9 @@ public class StudentsController {
      */
     @PostMapping
     public ResponseEntity<StudentResource> createStudent(@RequestBody CreateStudentResource resource) {
+
+        logger.info("CreateStudentResource: " + resource.toString());
+
         var createStudentCommand = CreateStudentCommandFromResourceAssembler.toCommandFromResource(resource);
         var studentId = studentCommandService.handle(createStudentCommand);
         if (studentId.studentRecordId().isEmpty()) {

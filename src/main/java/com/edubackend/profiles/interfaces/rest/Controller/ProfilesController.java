@@ -1,4 +1,8 @@
 package com.edubackend.profiles.interfaces.rest.Controller;
+import com.edubackend.edu.domain.model.queries.GetStudentByEduStudentRecordIdQuery;
+import com.edubackend.edu.domain.model.valueobjects.EduStudentRecordId;
+import com.edubackend.edu.interfaces.rest.resources.LogInStudentResource;
+import com.edubackend.edu.interfaces.rest.transform.LogInStudentCommandFromLogInStudentResourceAssembler;
 import com.edubackend.profiles.domain.model.queries.GetProfileByIdQuery;
 import com.edubackend.profiles.domain.services.ProfileCommandService;
 import com.edubackend.profiles.domain.services.ProfileQueryService;
@@ -83,5 +87,15 @@ public class ProfilesController {
         }
         var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(profile.get());
         return ResponseEntity.ok(profileResource);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<EduStudentRecordId> loginStudent(@RequestBody LogInStudentResource resource) {
+
+        var loginStudentCommand = LogInStudentCommandFromLogInStudentResourceAssembler.toCommand(resource);
+        var studentId = profileCommandService.handle(loginStudentCommand);
+        if (studentId.studentRecordId().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return new ResponseEntity<>(studentId, HttpStatus.OK);
     }
 }

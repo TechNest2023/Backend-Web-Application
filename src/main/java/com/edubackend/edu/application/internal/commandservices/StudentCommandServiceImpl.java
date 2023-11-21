@@ -2,6 +2,7 @@ package com.edubackend.edu.application.internal.commandservices;
 import com.edubackend.edu.application.internal.outboundservices.acl.ExternalService.ExternalProfileService;
 import com.edubackend.edu.domain.model.aggregates.Student;
 import com.edubackend.edu.domain.model.commands.CreateStudentCommand;
+import com.edubackend.profiles.domain.model.commands.LoginStudentCommand;
 import com.edubackend.edu.domain.model.valueobjects.EduStudentRecordId;
 import com.edubackend.edu.domain.services.StudentCommandService;
 import com.edubackend.edu.infraestructure.persistence.jpa.repositories.StudentRepository;
@@ -58,4 +59,6 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         studentRepository.save(student);
         return student.getEduStudentRecordId();
     }
+
+
 }
