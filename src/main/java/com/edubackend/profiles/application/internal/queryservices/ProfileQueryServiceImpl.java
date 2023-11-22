@@ -1,10 +1,13 @@
 package com.edubackend.profiles.application.internal.queryservices;
 import com.edubackend.profiles.domain.model.aggregates.Profile;
+import com.edubackend.profiles.domain.model.queries.GetAllProfileQuery;
 import com.edubackend.profiles.domain.model.queries.GetProfileByEmailQuery;
 import com.edubackend.profiles.domain.model.queries.GetProfileByIdQuery;
 import com.edubackend.profiles.domain.services.ProfileQueryService;
 import com.edubackend.profiles.infraestructure.persistence.jpa.repositories.ProfileRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,5 +28,10 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
     @Override
     public Optional<Profile> handle(GetProfileByIdQuery query) {
         return profileRepository.findById(query.profileId());
+    }
+
+    @Override
+    public List<Profile> handle(GetAllProfileQuery query) {
+        return profileRepository.findAll();
     }
 }

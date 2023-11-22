@@ -1,8 +1,12 @@
 package com.edubackend.profiles.interfaces.rest.Controller;
+import com.edubackend.edu.domain.model.queries.GetAllSpecialistQuery;
 import com.edubackend.edu.domain.model.queries.GetStudentByEduStudentRecordIdQuery;
 import com.edubackend.edu.domain.model.valueobjects.EduStudentRecordId;
 import com.edubackend.edu.interfaces.rest.resources.LogInStudentResource;
+import com.edubackend.edu.interfaces.rest.resources.SpecialistResource;
 import com.edubackend.edu.interfaces.rest.transform.LogInStudentCommandFromLogInStudentResourceAssembler;
+import com.edubackend.edu.interfaces.rest.transform.SpecialistResourceFromEntityAssembler;
+import com.edubackend.profiles.domain.model.queries.GetAllProfileQuery;
 import com.edubackend.profiles.domain.model.queries.GetProfileByIdQuery;
 import com.edubackend.profiles.domain.services.ProfileCommandService;
 import com.edubackend.profiles.domain.services.ProfileQueryService;
@@ -16,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * ProfilesController
  *
@@ -23,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
  *     It uses{@link ProfileCommandService} an {@link ProfileResource}
  *     to handle the commands y queries for profiles
  *     <ul>
+ *         <li>GET /api/v1/profiles</li>
  *         <li>POST /api/v1/profiles</li>
  *         <li>GET /api/v1/profiles/{profileId}</li>
  *     </ul>
@@ -97,5 +104,18 @@ public class ProfilesController {
             return ResponseEntity.badRequest().build();
         }
         return new ResponseEntity<>(studentId, HttpStatus.OK);
+    }
+
+    /**
+     * Gets all the profiles.
+     * @return the list of all the profile resources
+     * @see ProfileResource
+     */
+    @GetMapping
+    public ResponseEntity<List<ProfileResource>> getAllProfiles() {
+        var getAllProfileQuery = new GetAllProfileQuery();
+        var profiles = profileQueryService.handle(getAllProfileQuery);
+        var profileResources = profiles.stream().map(ProfileResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(profileResources);
     }
 }
